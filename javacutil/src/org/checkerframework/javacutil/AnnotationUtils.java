@@ -567,7 +567,7 @@ public class AnnotationUtils {
             AnnotationMirror anno, CharSequence name, boolean useDefaults) {
         Name cn = getElementValueClassName(anno, name, useDefaults);
         try {
-            Class<?> cls = Class.forName(cn.toString());
+            Class<?> cls = Class.forName(cn.toString(), true, ClassLoader.getSystemClassLoader());
             return cls;
         } catch (ClassNotFoundException e) {
             ErrorReporter.errorAbort(
