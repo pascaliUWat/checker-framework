@@ -567,17 +567,23 @@ public class AnnotationUtils {
             AnnotationMirror anno, CharSequence name, boolean useDefaults) {
         Name cn = getElementValueClassName(anno, name, useDefaults);
         try {
-            Class<?> cls = Class.forName(cn.toString(), true, ClassLoader.getSystemClassLoader());
+            Class<?> cls = Class.forName(cn.toString());
             return cls;
         } catch (ClassNotFoundException e) {
-            ErrorReporter.errorAbort(
-                    "Could not load class '"
-                            + cn
-                            + "' for field '"
-                            + name
-                            + "' in annotation "
-                            + anno,
-                    e);
+            try {
+                Class<?> cls =
+                        Class.forName(cn.toString(), true, ClassLoader.getSystemClassLoader());
+                return cls;
+            } catch (ClassNotFoundException ce) {
+                ErrorReporter.errorAbort(
+                        "Could not load class '"
+                                + cn
+                                + "' for field '"
+                                + name
+                                + "' in annotation "
+                                + anno,
+                        e);
+            }
             return null; // dead code
         }
     }
